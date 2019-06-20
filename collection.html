@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="description" content="Backbone Exercise 1 : Model" />
+    <meta charset=utf-8 />
+    <title>Welcome to JS Bin</title>
+    <script src="js/jquery.js"></script>
+    <script src="js/sinon.js"></script>
+    <script src="js/fakeserver.js"></script>
+    <script src="js/underscore.js"></script>
+    <script src="js/backbone.js"></script>
+</head>
+
+<body>
+    <pre>
+        /**
+        *    Backbone.Collection exercises
+        *    Prerequisites: knowledge of Backbone.Model
+        */
+
+        // ******************************************
+        // Example
+        //
+        // - Create a Backbone.Model constructor
+        //   called Person.
+        // - Create a Backbone.Collection constructor
+        //   called PersonCollection.
+        //    - The 'model' must point to the Person
+        //      constructor.
+        //    - The 'url' must be '/persons'.
+        // - Create an instance of PersonCollection
+        // - Call 'fetch' on the PersonCollection
+        //   instance
+        // - Add a success handler to fetch.
+        // - Inside the success handler, verify the
+        //   existance of 3 items in the collection
+        // ******************************************
+    </pre>
+
+    <input type="button" value="Execute example" onclick="example()"/>
+    <pre>
+        // ******************************************
+        // Exercise 1
+        //
+        // - Create a new Person.
+        // - Set the firstName to your first name
+        // - Set the lastName to your last name
+        // - Add the new person to the collection
+        // - Call 'save' on the model to save it
+        //   to the server.
+        // - Add a 'success' handler to 'save'.
+        // - In the success handler, verify that
+        //   the length of the collection
+        //   has increased.
+        // - In the success handler, call 'done'
+        // ******************************************
+    </pre>
+    <input type="button" value="Execute exercise - 1" onclick="executeExample1()"/>
+    <pre>
+        // ******************************************
+        // Exercise 2
+        //
+        // - Get a random model from the collection.
+        // - Call the 'destroy' function on the model. 
+        // - Add a success handler on 'destroy'.
+        // - In the success handler, verify that
+        //   the length of the collection has decreased.
+        // - In the success handler, call 'done'
+        // - Verify (by inspecting the console)
+        //   that it is the item you chose to delete 
+        //   that is no longer there.
+        // ******************************************
+    </pre>
+    <input type="button" value="Execute exercise - 2" onclick="executeExample2()"/>
+    <pre>      
+        // ******************************************
+        // Exercise 3
+        //
+        // - Retrieve the first model from the
+        //   collection
+        // - Change the firstName to a different value
+        // - Call 'save' on the model.
+        // - Add a success handler to 'save'.
+        // - In the success handler, verify that the
+        //   item you attempted to change was
+        //   modified.  
+        // - In the success handler, call 'done'
+        // - Verify (by inspecting the console)
+        //   that your change has also been propagated
+        //   to the server.
+        // ******************************************
+    </pre>
+    <input type="button" value="Execute exercise - 3" onclick="executeExample3()"/>
+    <script type="text/javascript">
+        /**
+        *    Backbone.Collection exercises
+        *    Prerequisites: knowledge of Backbone.Model
+        */
+
+        // ******************************************
+        // Example
+        //
+        // - Create a Backbone.Model constructor
+        //   called Person.
+        // - Create a Backbone.Collection constructor
+        //   called PersonCollection.
+        //    - The 'model' must point to the Person
+        //      constructor.
+        //    - The 'url' must be '/persons'.
+        // - Create an instance of PersonCollection
+        // - Call 'fetch' on the PersonCollection
+        //   instance
+        // - Add a success handler to fetch.
+        // - Inside the success handler, verify the
+        //   existance of 3 items in the collection
+        // ******************************************
+        var Person = Backbone.Model.extend({});
+        var PersonCollection = Backbone.Collection.extend({
+            model: Person,
+            url: '/persons'
+        });
+        var myCollection = new PersonCollection();
+
+
+        function example() {
+            myCollection.fetch().success(function () {
+                console.info('Collection length: ' + myCollection.length);
+            });
+        }
+
+        // ******************************************
+        // Exercise 1
+        //
+        // - Create a new Person.
+        // - Set the firstName to your first name
+        // - Set the lastName to your last name
+        // - Add the new person to the collection
+        // - Call 'save' on the model to save it
+        //   to the server.
+        // - Add a 'success' handler to 'save'.
+        // - In the success handler, verify that
+        //   the length of the collection
+        //   has increased.
+        // - In the success handler, call 'done'
+        // ******************************************
+        function exercise1(done) {
+            var p = new Person();
+            p.set('firstName', 'Barack');
+            p.set('lastName', 'Obama');
+            myCollection.add(p);
+            p.save().success(function () {
+                console.info('New Length: ' + myCollection.length);
+                done();
+            });
+        }
+
+        // ******************************************
+        // Exercise 2
+        //
+        // - Get a random model from the collection.
+        // - Call the 'destroy' function on the model. 
+        // - Add a success handler on 'destroy'.
+        // - In the success handler, verify that
+        //   the length of the collection has decreased.
+        // - In the success handler, call 'done'
+        // - Verify (by inspecting the console)
+        //   that it is the item you chose to delete 
+        //   that is no longer there.
+        // ******************************************
+        function exercise2(done) {
+            var annaSmith = myCollection.at(1);
+            annaSmith.destroy().success(function () {
+                done();
+            });
+        }
+
+        // ******************************************
+        // Exercise 3
+        //
+        // - Retrieve the first model from the
+        //   collection
+        // - Change the firstName to a different value
+        // - Call 'save' on the model.
+        // - Add a success handler to 'save'.
+        // - In the success handler, verify that the
+        //   item you attempted to change was
+        //   modified.  
+        // - In the success handler, call 'done'
+        // - Verify (by inspecting the console)
+        //   that your change has also been propagated
+        //   to the server.
+        // ******************************************
+        function exercise3(done) {
+            var jones = myCollection.at(1);
+            jones.set('firstName', 'Indiana');
+            jones.save().success(function () {
+                done();
+            });
+        }
+        // ********************************************
+        // Utility Code to perform exercises
+        // ********************************************              
+
+        function executeExample1() {
+            exercise1(printStatus(1));
+        }
+        function executeExample2() {
+            exercise2(printStatus(2));
+        }
+        function executeExample3() {
+            exercise3(printStatus(3));
+        }
+
+        function printStatus(exercise) {
+            return function () {
+                console.log('%c Exercise ' + exercise + ' finished. Persons on server --->', 'background: #222; color: #bada55');
+                $.ajax('/persons').success(function (data) {
+                    data.forEach(function (d) {
+                        console.info(d.firstName + ' ' + d.lastName + ' (' + d.id + ')');
+                    });
+                });
+            };
+        }
+
+
+    </script>
+
+</body>
+
+</html>
